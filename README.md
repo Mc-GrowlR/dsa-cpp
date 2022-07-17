@@ -1,7 +1,11 @@
 # dsa-cpp
 
 
-
+## 目录说明
+- log:开发日志文件
+- include :头文件
+- main.cpp :测试文件
+- main.o 生成的测试程序
 
 
 
