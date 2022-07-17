@@ -1,0 +1,81 @@
+# 2022-07-17
+- 解决列表模板类寻秩访问的问题
+  - 解决`[]`重载运算符中的循环开始条件的赋值错误
+- 解决`[]`重载运算符中的最后一位的取值错误问题
+- 添加列表模板类方法：列表遍历接口
+- 利用友元机制调整列表模板类和列表节点模板类之间的关系
+- 调整和修改了代码中方法和函数的注释说明。
+
+# gdb调试显示错误
+```cpp
+Program terminated with signal SIGSEGV, Segmentation fault.
+The program no longer exists.
+```
+运行程序时显示：段错误 (核心已转储)
+
+
+## 原本的插入节点为首节点模板类方法
+
+```cpp
+template <typename T>
+ListNode<T> *List<T>::InsertAsFirst(T const &e)
+{
+    return this->InsertAsSucc(this->_header, e);
+}
+```
+
+所调用的 插入节点为节点后驱 模板类方法
+
+```cpp
+template <typename T>
+ListNode<T> *List<T>::InsertAsSucc(ListNode<T> *p, T const &e)
+{
+    ListNode<T> *ias = new ListNode(e, p, p->Succ());
+    ListNode<T> *i = p->Succ();
+    i->ChangePred(ias);
+    p->ChangeSucc(ias);
+    this->_size++;
+    return ias;
+}
+```
+
+## 将要加入的`[]`运算符
+```cpp
+template <typename T>
+T List<T>::operator[](Rank r) const
+{
+    ListNode<T>* p = this->Last();
+    while (0<r--)
+    {
+        p=p->Succ();
+    }
+    T a = p->Data();
+    return a;
+}
+```
+
+## 问题原因
+
+在遍历访问列表时，开始的首节点的赋值出现了问题：
+**将开始节点的地址设为了列表末节点的地址。**
+如此，在开始遍历后，寻秩访问方法很快就会越界，从而发生错误。
+
+## 解决方法
+
+将 `this->Last()` 改为 `this->First()`
+
+意思为：遍历的开始节点改为列表的首节点。
+
+# 插入节点方法赋值错误
+
+## 描述
+
+认为制定赋值的值为`5`，但是在调用`InsertAsFirst()`时，赋给第一个节点的值却是`0`。
+
+## 原因
+
+经过排查，不是插入方法的问题，而是`[]`运算符方法的问题
+
+# 为节点模板类添加有元模板类
+
+使得列表模板类可以直接更改节点中的数据
