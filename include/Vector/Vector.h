@@ -2,7 +2,7 @@
 #define DEFAULT_CAPACITY 3 //默认初始容量（实际应用中可设置为更大）
 typedef int Rank;
 template <typename T>
-static Rank binsearch(T *A, Rank lo, Rank hi);
+static Rank binsearch(T *A, T& e, Rank lo, Rank hi);
 template <typename T>
 class Vector
 {
@@ -44,7 +44,7 @@ public:
     //返回向量规模
     Rank size() const { return _size; };
     //取秩为r的值
-    T get(int r);
+    T get(int r) { return _elem[r]};
     //判断向量是否为空
     bool empty() const { return !_size; }
     //判断向量是否已排序
@@ -62,8 +62,7 @@ public:
     //重载下标操作符，可以类似亍数组形式引用各元素
     T &operator[](Rank r) const
     {
-        if (r < _size)
-            return _elem[r];
+        return _elem[r];
     };
     Vector<T> &operator=(Vector<T> const &); //重载赋值操作符，以便直接克隆向量
     //初除秩为r癿元素
@@ -137,10 +136,10 @@ void Vector<T>::shrink()
     //备份
     T *oldElem = _elem;
     //分配容量减半的新空间
-    _elem = new T[_capacity >>= 1]
-        //复制原向量内容
-        for (int i = 0; i < _size; i++)
-            _elem[i] = oldElem[i];
+    _elem = new T[_capacity >>= 1];
+    //复制原向量内容
+    for (int i = 0; i < _size; i++)
+        _elem[i] = oldElem[i];
     delete[] oldElem;
 }
 
@@ -258,7 +257,7 @@ int Vector<T>::uniquify()
     Rank i = 0, j = 0;
     while (++j < _size)
     {
-        if (_elem[i - 1] !=)
+        if (_elem[i] != _elem[j])
         {
             _elem[++i] = _elem[j];
         }
@@ -271,21 +270,21 @@ int Vector<T>::uniquify()
 template <typename T>
 Rank Vector<T>::search(T const &e, Rank lo, Rank hi) const
 {
-    binSearch(_elem, e, lo, hi);
+    return binSearch(_elem, e, lo, hi);
 }
 
 //有序向量查找
 template <typename T>
-static Rank binsearch(T *A, Rank lo, Rank hi)
+static Rank binsearch(T *A, T& e, Rank lo, Rank hi)
 {
     while (lo < hi)
     {
         Rank mi = (lo + hi) >> 1;
-        if (e < _elem[mi])
+        if (e < A[mi])
         {
             mi = hi;
         }
-        else if (e > _elem[mi])
+        else if (e > A[mi])
         {
             mi = lo;
         }
@@ -295,4 +294,9 @@ static Rank binsearch(T *A, Rank lo, Rank hi)
         }
     }
     return -1;
+}
+
+template <typename T>
+void Vector<T>::sort(Rank lo, Rank _hi)
+{
 }

@@ -1,19 +1,22 @@
 #include <iostream>
 #include <cstdlib>
-
+//库文件
+//列表
 #include "List.h"
-
+//向量
+#include "Vector.h"
 template <typename T>
 void Show(const List<T> &L);
-
 template <typename T>
-void add(T&e );
+void Show(const Vector<T> &V);
+template <typename T>
+void add(T &e);
 
 int main()
 {
     using namespace std;
     List<int> lll1;
-    
+
     cout << "size: " << lll1.Size() << endl;
     /*
     ListNode<int> *ppp = lll1.InsertAsFirst(5);
@@ -24,13 +27,13 @@ int main()
     */
     int count;
     cin >> count;
-    
+
     for (int i = 0; i < count; i++)
     {
         lll1.InsertASLast(5);
     }
     cout << "size: " << lll1.Size() << endl;
-    //cout<<lll1.operator[](2)<<endl;
+    // cout<<lll1.operator[](2)<<endl;
     Show(lll1);
     /*
     lll1.InsertAsFirst(5);
@@ -48,17 +51,17 @@ int main()
     // else{
     //     cout<<"cuowu"<<endl;
     // }
-    cout<<lll1.First()->Data()<<endl;
-    cout<<lll1.Last()->Data()<<endl;
+    cout << lll1.First()->Data() << endl;
+    cout << lll1.Last()->Data() << endl;
     // --count;
-    cout << lll1[--count]<<endl<<endl;
+    cout << lll1[--count] << endl
+         << endl;
 
-    cout<<lll1.deduplicate()<<endl;
+    cout << lll1.deduplicate() << endl;
     Show(lll1);
-    cout<<endl;
-
-
+    cout << endl;
     //测试列表遍历接口
+    cout << "请输入增加的节点数：" << endl;
     cin >> count;
     for (int i = 0; i < count; i++)
     {
@@ -67,9 +70,43 @@ int main()
     cout << "size: " << lll1.Size() << endl;
     lll1.traverse(add);
     Show(lll1);
+    cout << "********** Vector **********" << endl;
+    //声明
+    Vector<int> vec1(10);
+    cout << "请输入要储存在向量中的数 1 ：" << endl;
+    int num;
+    cin >> num;
+    for (int i = 0; i < 10; i++)
+    {
+        vec1.insert(num);
+    }
+    cout << "插入结果：" << endl;
+    // for (Rank i = 0; i < 10; i++)
+    // {
+    //     cout << vec1[i] << " ";
+    // }
+    Show(vec1);
+
+    //向量唯一化测试
+    cout<<endl;
+    vec1.uniquify();
+    cout<<"**********有序排列唯一化："<<endl;
+    Show(vec1);
+    cout << "请输入要储存在向量中的数：" << endl;
+    cin >> num;
+    for (int i = 0; i < 10; i++)
+    {
+        vec1.insert(num);
+    }
+    Show(vec1);
+    vec1.deduplicate();
+    cout<<"**********无序唯一化"<<endl;
+    Show(vec1);
     return 0;
 }
 
+
+//显示列表
 template <typename T>
 void Show(const List<T> &L)
 {
@@ -84,17 +121,37 @@ void Show(const List<T> &L)
          << "节点值" << endl;
     while (i++ < n)
     {
-
-            /* code */
-            cout << i << "\t\t" << // L[i]
-              (((pp = pp->Succ())->Pred())->Data()) << endl;    
-        
+        cout << i << "\t\t" << // L[i]
+            (((pp = pp->Succ())->Pred())->Data()) << endl;
     }
     cout << endl;
 }
+template <typename T>
+void Show(const Vector<T> &V)
+{
+    using std::cout;
+    using std::endl;
+    int n = V.size();
+    int i = 0;
+    cout << "Vector: " << endl;
+    cout << "序号"
+         << "\t\t"
+         << "节点值" << endl;
+    // while (i++<n)
+    // {
+    //     cout<<i<<"\t\t"
+    //         <<V[i]<<endl;
+    // }
+    for (Rank i = 0; i < V.size(); i++)
+    {
+        //cout << V[i] << " ";
+        cout<<i<<"\t\t"
+            <<V[i]<<endl;
+    }
+}
 
 template <typename T>
-void add(T&e )
+void add(T &e)
 {
     e++;
 }
